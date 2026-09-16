@@ -38,5 +38,5 @@ jobs:
           sed -i 's|image: hyeon22/nginx:.*|image: hyeon22/nginx:${{ github.sha }}|g" ./k8s/deployment.yaml
           
           git add ./k8s/deployment.yaml
-          git commit -m "Deployment file tag Update(${{ gitub.sha }})"
+          git commit -m "Deployment file tag Update(${{ github.sha }})"
           git push
