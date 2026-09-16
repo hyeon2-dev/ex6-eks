@@ -25,11 +25,50 @@ metadata:
   name: nginx-svc
   namespace: default
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: nginx-web-label
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alb-base-ingress
+  annotations:  # 보안 그룹 등 AWS에 대한 설정들
+    # 보안 그룹 설정 alb.ingress.kubernetes.io/security-groups: 보안id, 보안id, ...
+    # alb.ingress.kubernetes.io/security-groups: sg-0487a650d47e5a840
+    # internet-facing: 외부로드밸런서(IP 부여), internet(내부)
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # ip(Pod의 IP로 트래픽 전달)
+    # instance: EC2인스턴스를 대상으로 하는 타켓 그룹 생성
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    # HTTPS 인증서 정의 alb.ingress.kubernetes.io/certificate-arn: <인증서ARN>
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:925047940866:certificate/2c1052cf-c683-464d-a305-8098754408c8
+    # HTTP접속시 HTTPS로 리다이렉션(선택사항이지만 권장)
+    alb.ingress.kubernetes.io/ssl-redircet: "443"
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+      paths:
+        - path: /                   # 복잡한 경로는 가급적 위쪽에 위치(우선순위)                 
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-svc # <service_name>
+              port:
+                number: 80
+        # - path: /api                # fastAPI: main.py의 # app = FASTAPI(root_path="/api")   
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: # <service_name>
+        #       port:
+        #         number: 8000
+
+
           
