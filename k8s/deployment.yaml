@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nginx-container
-          image: hyeon22/nginx:bee80fa5ed71664ac2028282aed3c369a64f839f
+          image: hyeon22/nginx:b93723e18073b840f2b4e4d9b8622be1980505a8
           ports:
             - containerPort: 80
 ---
