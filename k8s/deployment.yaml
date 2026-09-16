@@ -16,9 +16,9 @@ spec:
       containers:
         - name: nginx-container
 <<<<<<< HEAD
-          image: hyeon22/nginx:598ecc2e311de0874f59838cf1189af12043fc2b
+          image: hyeon22/nginx:a5ba2b48a4e3b8dec1d9cdfc8b857da08f923c78
 =======
-          image: hyeon22/nginx:b338875ab0f7f0fd0b9752e42eeb433900946ef2
+          image: hyeon22/nginx:a5ba2b48a4e3b8dec1d9cdfc8b857da08f923c78
 >>>>>>> f9fefb4 (eks)
           ports:
             - containerPort: 80
