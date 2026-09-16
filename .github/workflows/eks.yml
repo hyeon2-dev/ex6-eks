@@ -35,7 +35,7 @@ jobs:
 
           # k8s/deployment.yaml 파일 내의 이미지 태그를 현재 커밋 SHA 버전으로 변경
           # (사용하시는 deployment.yaml 파일의 경로에맞게 수정해주세요)
-          sed -i 's|image: hyeon22/nginx:.*|image: hyeon22/nginx:${{ github.sha }}|g" ./k8s/deployment.yaml
+          sed -i 's|image: hyeon22/nginx:.*|image: hyeon22/nginx:${{ github.sha }}|g' ./k8s/deployment.yaml
           
           git add ./k8s/deployment.yaml
           git commit -m "Deployment file tag Update(${{ github.sha }})"
