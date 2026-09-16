@@ -15,15 +15,7 @@ spec:
     spec:
       containers:
         - name: nginx-container
-<<<<<<< HEAD
-<<<<<<< HEAD
-          image: hyeon22/nginx:20ad269d683e5475289733f3740e339fef5b2f4e
-=======
-          image: hyeon22/nginx:20ad269d683e5475289733f3740e339fef5b2f4e
->>>>>>> a056ef5 (alb ingress)
-=======
           image: hyeon22/nginx:bee80fa5ed71664ac2028282aed3c369a64f839f
->>>>>>> c166de9 (alb ingress)
           ports:
             - containerPort: 80
 ---
