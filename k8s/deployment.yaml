@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  namespace: default
 spec:
   replicas: 2   # 파드 갯수
   selector:
@@ -21,7 +22,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-svc
+  name: nginx-
+  namespace: default
 spec:
   type: LoadBalancer
   selector:
