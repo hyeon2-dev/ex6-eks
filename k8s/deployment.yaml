@@ -55,21 +55,21 @@ spec:
   ingressClassName: alb
   rules:
     - http:
-      paths:
-        - path: /                   # 복잡한 경로는 가급적 위쪽에 위치(우선순위)                 
-          pathType: Prefix
-          backend:
-            service:
-              name: nginx-svc # <service_name>
-              port:
-                number: 80
-        # - path: /api                # fastAPI: main.py의 # app = FASTAPI(root_path="/api")   
-        #   pathType: Prefix
-        #   backend:
-        #     service:
-        #       name: # <service_name>
-        #       port:
-        #         number: 8000
+        paths:
+          - path: /                   # 복잡한 경로는 가급적 위쪽에 위치(우선순위)                 
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-svc # <service_name>
+                port:
+                  number: 80
+          # - path: /api                # fastAPI: main.py의 # app = FASTAPI(root_path="/api")   
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: # <service_name>
+          #       port:
+          #         number: 8000
 
 
           
