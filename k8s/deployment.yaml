@@ -15,7 +15,11 @@ spec:
     spec:
       containers:
         - name: nginx-container
+<<<<<<< HEAD
           image: hyeon22/nginx:2a95bc316811360d1bd2fd0beeb60263b7edf4a9
+=======
+          image: hyeon22/nginx:bee80fa5ed71664ac2028282aed3c369a64f839f
+>>>>>>> a056ef5 (alb ingress)
           ports:
             - containerPort: 80
 ---
@@ -37,39 +41,52 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: alb-base-ingress
-  namespace: default
   annotations:  # 보안 그룹 등 AWS에 대한 설정들
-    # 보안 그룹 설정 alb.ingress.kubernetes.io/security-groups: 보안id, 보안id, ...
-    # alb.ingress.kubernetes.io/security-groups: sg-0487a650d47e5a840
+    # 보안 그룹 설정: alb.ingress.kubernetes.io/security-groups: id, id, ...
+    # alb.ingress.kubernetes.io/security-groups: sg-08344a6a23c701510
     # internet-facing: 외부로드밸런서(IP 부여), internet(내부)
     alb.ingress.kubernetes.io/scheme: internet-facing
     # ip(Pod의 IP로 트래픽 전달)
-    # instance: EC2인스턴스를 대상으로 하는 타켓 그룹 생성
+    # instance: EC2인스턴스를 대상으로 하는 타겟 그룹 생성
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    # HTTPS 인증서 정의 alb.ingress.kubernetes.io/certificate-arn: <인증서ARN>
+    # HTTPS 인증서 정의: alb.ingress.kubernetes.io/certificate-arn: <인증서ARN>
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:925047940866:certificate/2c1052cf-c683-464d-a305-8098754408c8
-    # HTTP접속시 HTTPS로 리다이렉션(선택사항이지만 권장)
+    # HTTP접속 시 HTTPS로 리다이렉션(선택사항, 권장)
     alb.ingress.kubernetes.io/ssl-redirect: "443"
+    # 경로 재작성: 백앤드로 연결시 경로를 바꿔줍니다.
+    # Nginx Ingress Controller 사용시: nginx.ingress.kubernetes.io/rewrite-target: /
+    # alb.ingress.kubernetes.io/transforms.<service-name>: >
+    alb.ingress.kubernetes.io/transforms.nginx-svc: >
+      [
+        {
+          "type": "url-rewrite",
+          "urlRewriteConfig": {
+            "rewrites": [
+              {
+                "regex": "^\\/nginx(?:\\/(.*))?$",
+                "replace": "/$1"
+              }
+            ]
+          }
+        }
+      ]
 spec:
   ingressClassName: alb
   rules:
     - http:
         paths:
-          - path: /                   # 복잡한 경로는 가급적 위쪽에 위치(우선순위)                 
+          - path: /nginx
             pathType: Prefix
             backend:
               service:
-                name: nginx-svc # <service_name>
+                name: nginx-svc   # Kubernetes Service Name
                 port:
                   number: 80
-          # - path: /api                # fastAPI: main.py의 # app = FASTAPI(root_path="/api")   
+          # - path: /api      # fastAPI: main.py의 # app = FastAPI(root_path="/api")
           #   pathType: Prefix
           #   backend:
           #     service:
-          #       name: # <service_name>
+          #       name: <service_name>
           #       port:
           #         number: 8000
-
-
-          
